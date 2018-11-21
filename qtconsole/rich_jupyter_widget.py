@@ -386,8 +386,8 @@ class RichJupyterWidget(RichIPythonWidget):
         """
         try:
             image = svg_to_image(svg)
-        except ValueError:
-            self._insert_plain_text(cursor, 'Received invalid SVG data.')
+        except ValueError as e:
+            self._insert_plain_text(cursor, 'Received invalid SVG data. %s' % e)
         else:
             format = self._add_image(image)
             self._name_to_svg_map[format.name()] = svg

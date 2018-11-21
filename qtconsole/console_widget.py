@@ -944,6 +944,8 @@ class ConsoleWidget(MetaQObjectHasTraits('NewBase', (LoggingConfigurable, superQ
 
         # Perform the insertion.
         result = insert(cursor, input, *args, **kwargs)
+        if not self._executing:
+            self._control.moveCursor(QtGui.QTextCursor.End)
 
         return result
 
