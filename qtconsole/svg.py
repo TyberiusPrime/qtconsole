@@ -81,7 +81,14 @@ def svg_to_image(string, size=None):
 
     renderer = QtSvg.QSvgRenderer(QtCore.QByteArray(string))
     if not renderer.isValid():
-        raise ValueError('Invalid SVG data.')
+        import re
+        #we need to ignore the height attribute that is necessary
+        #for newer jupyter notebooks, but trips up the QSvgRenderer
+        if re.search(b"height='[0-9]+'", string):
+            string = re.sub(b"height='[0-9]+'", b'', string)
+            renderer = QtSvg.QSvgRenderer(QtCore.QByteArray(string))
+            if not renderer.isValid():
+                raise ValueError('Invalid SVG data.%s' % string)
 
     if size is None:
         size = renderer.defaultSize()
